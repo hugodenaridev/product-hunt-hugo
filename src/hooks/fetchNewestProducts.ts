@@ -2,7 +2,7 @@ export const fetchNewestProducts = async ({ pageParam = null }) => {
     const response = await fetch('https://api.producthunt.com/v2/api/graphql', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer _xh4A7xy-oVmh32CSSN1lWJaTs6QkPehdfxibfmyMlo`,
+        'Authorization': `Bearer ${import.meta.env.VITE_DEV_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
