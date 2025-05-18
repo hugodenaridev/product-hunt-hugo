@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
-const Tabs = () => {
-  const [activeTab, setActiveTab] = useState('Popular');
+interface TabsProps {
+  activeTab: string;
+  setActiveTab: Dispatch<SetStateAction<string>>;
+}
 
+const Tabs = ({ activeTab, setActiveTab }: TabsProps) => {
   return (
     <TabsContainer>
       <Tab

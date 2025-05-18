@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import ProductList from './pages/ProductList';
+import ProductList from './pages/ProductList/ProductList';
 import ProductDetail from './pages/ProductDetail';
-import Layout from './components/Layout';
+import Layout from './components/Layout/Layout';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -13,19 +14,23 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
-    <Router>
-      <GlobalStyle />
-      <AppWrapper>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<ProductList />} />
-          </Route>
-          <Route path="/product/:id" element={<ProductDetail />} />
-        </Routes>
-      </AppWrapper>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <GlobalStyle />
+        <AppWrapper>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<ProductList />} />
+            </Route>
+            <Route path="/product/:id" element={<ProductDetail />} />
+          </Routes>
+        </AppWrapper>
+      </Router>
+    </QueryClientProvider>
   );
 };
 

@@ -1,22 +1,25 @@
 import styled from 'styled-components';
-import Header from './Header';
-import Tabs from './Tabs';
+import Header from '../Header/Header';
+import Tabs from '../Tabs/Tabs';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 const Layout = () => {
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const [activeTab, setActiveTab] = useState('Popular');
+  const [search, setSearch] = useState('');
 
   return (
     <Wrapper>
       {isHome && (
         <>
-          <Header />
-          <Tabs />
+          <Header search={search} setSearch={setSearch} />
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
         </>
       )}
       <MainContent>
-        <Outlet />
+        <Outlet context={{ activeTab, search }} />
       </MainContent>
     </Wrapper>
   );

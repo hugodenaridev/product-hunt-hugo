@@ -1,8 +1,25 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const product = location.state?.product;
+
+  if (!product) {
+    return (
+      <Container>
+        <Header>
+          <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+        </Header>
+        <Content>
+          <div style={{ textAlign: 'center', color: '#aaa', marginTop: '2rem' }}>
+            No product data found.
+          </div>
+        </Content>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -11,37 +28,30 @@ const ProductDetail = () => {
           Back
         </BackButton>
       </Header>
+      <ImagePreview>
+        <img src={product.thumbnail?.url} alt="Product screenshot" />
+      </ImagePreview>
       <Content>
-        <ImagePreview>
-          <img src="https://via.placeholder.com/600x300" alt="Product screenshot" />
-        </ImagePreview>
         <ProductCard>
           <ProductHeader>
             <ProductIcon>
-              <img src="https://via.placeholder.com/60" alt="icon" />
+              <img src={product.thumbnail?.url} alt="icon" />
             </ProductIcon>
             <ProductInfo>
-              <ProductTitle>Uizard</ProductTitle>
-              <ProductLabel>IPHONE</ProductLabel>
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductLabel>{product.category || ''}</ProductLabel>
             </ProductInfo>
           </ProductHeader>
-          <Description>
-            Uizard allows you to transform your wireframes into prototypes — automatically.
-            Test your ideas in seconds, create high-fidelity prototypes, export front-end code, customize styleguides, export to Sketch, iterate fast!
-          </Description>
-          <Meta>
-            <Tag>#2 Product of the Day</Tag>
-            <Date>2 days ago</Date>
-          </Meta>
+          <Description>{product.tagline}</Description>
         </ProductCard>
       </Content>
       <Spacer />
       <ActionBar>
-        <GetItButton>
+        <GetItButton onClick={() => window.open(product.url, '_blank', 'noopener,noreferrer')}>
           Get it
         </GetItButton>
         <UpvoteButton>
-          Upvote
+          Upvote ({product.votesCount})
         </UpvoteButton>
       </ActionBar>
     </Container>
@@ -79,11 +89,20 @@ const Content = styled.div`
 `;
 
 const ImagePreview = styled.div`
+  width: 100%;
+  max-width: 300px;      // Limit the width
   border-radius: 16px;
   overflow: hidden;
+  margin: 0 auto 2rem auto;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
 `;
@@ -139,22 +158,6 @@ const Description = styled.p`
   font-size: 1rem;
   color: #374151;
   line-height: 1.6;
-`;
-
-const Meta = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  color: #6b7280;
-`;
-
-const Tag = styled.span`
-  font-weight: 600;
-  color: #10b981;
-`;
-
-const Date = styled.span`
-  font-size: 0.85rem;
 `;
 
 const Spacer = styled.div`
